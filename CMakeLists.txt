@@ -1,10 +1,16 @@
-cmake_minimum_required(VERSION 2.8.12)
-project (hello2)
+PROJECT(MyRegex)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-#This fills in the CMake variables with our dependencies. It also sets the right build flags for our compiler etc
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+INCLUDE(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+CONAN_BASIC_SETUP()
 
-#Building the actual application
-add_executable(hello2 hello2.cpp)
-target_link_libraries(hello2 ${CONAN_LIBS})
+# Just comment or uncomment the FindPackage line to use it or not
+FIND_PACKAGE(Boost 1.60.0 COMPONENTS regex)
+IF(Boost_FOUND)
+	INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+	ADD_EXECUTABLE(regex main.cpp)
+	TARGET_LINK_LIBRARIES(regex ${Boost_LIBRARIES})
+ELSE()
+	ADD_EXECUTABLE(regex main.cpp)
+	TARGET_LINK_LIBRARIES(regex ${CONAN_LIBS})
+ENDIF()
